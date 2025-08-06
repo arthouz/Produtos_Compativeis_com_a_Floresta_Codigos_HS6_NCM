@@ -60,30 +60,39 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(237, 201, 81, 0.5);
         }
+        .processing-flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .processing-flow-text {
+            background-color: #EDC951;
+            color: #6A4A3C;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.1);
+            min-width: 150px;
+        }
+        .processing-flow-arrow {
+            color: #CC333F;
+            font-size: 2rem;
+            margin: 0.5rem 0;
+        }
+        .processing-ncm-tag {
+            background-color: #00A0B0;
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body class="text-gray-800">
-    <!-- Chosen Color Palette: Vibrant (Brilliant Blues, Energetic & Playful, Warm Earth Tones) -->
-    <!-- No Mermaid JS or SVG used in this output. -->
-    <!-- Narrative Plan:
-        1. Introduction/Hook: Title and subtitle to set the stage.
-        2. KPIs: Quick overview of the scope (products, chapters, sources).
-        3. Process Flow: Visual explanation of the NCM classification process.
-        4. Data Visualizations (Charts):
-            - Distribution by NCM Chapter (Doughnut Chart): Shows the variety of chapters covered.
-            - Impact of Processing (Bar Chart): Highlights how processing changes NCM, using Açaí as an example.
-        5. Product Explorer (Table with Search): Interactive table for detailed lookup of products and their suggested NCMs, with a new LLM-powered detail feature.
-        6. Conclusion/Footer: Disclaimer and source information.
-    -->
-    <!-- Visualization Choices:
-        - KPIs: Single Big Number (HTML/Tailwind) - To inform key metrics. No SVG.
-        - Process Flow: Flow Chart (Structured HTML/CSS with Tailwind) - To organize and show process. No SVG.
-        - Distribution by NCM Chapter: Donut Chart (Chart.js/Canvas) - To compare composition. No SVG.
-        - Impact of Processing: Bar Chart (Chart.js/Canvas) - To compare categories and show impact. No SVG.
-        - Product Explorer: List/Table (HTML Table with JS filter) - To organize and allow lookup. No SVG.
-        - NCM Details: Text explanation (LLM via Gemini API) displayed in a modal. No SVG.
-    -->
-
     <div class="container mx-auto p-4 md:p-8">
 
         <header class="text-center mb-12">
@@ -135,10 +144,23 @@
             </div>
 
             <div id="processing-impact" class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-3xl font-bold text-[#6A4A3C] text-center mb-2">O Impacto do Processamento</h2>
-                <p class="text-center text-gray-600 mb-6">Um mesmo produto pode ter múltiplas classificações NCM dependendo do seu estado. O açaí é um exemplo clássico: sua NCM muda se for fruto congelado, purê ou uma preparação alimentícia.</p>
-                <div class="chart-container mx-auto">
-                    <canvas id="processingImpactChart"></canvas>
+                <h2 class="text-3xl font-bold text-[#6A4A3C] text-center mb-2">O Impacto do Processamento: Exemplo do Açaí</h2>
+                <p class="text-center text-gray-600 mb-6">A NCM de um produto pode mudar drasticamente dependendo do seu estado e nível de processamento. Veja como o açaí, um mesmo fruto, transita entre diferentes classificações.</p>
+                <div class="flex flex-col items-center justify-center py-4">
+                    <div class="processing-flow-item">
+                        <div class="processing-flow-text">Açaí (fruto fresco/polpa congelada pura)</div>
+                        <div class="processing-ncm-tag">NCM Cap. 08</div>
+                    </div>
+                    <div class="processing-flow-arrow">&darr;</div>
+                    <div class="processing-flow-item">
+                        <div class="processing-flow-text">Açaí (purê cozido, sem aditivos)</div>
+                        <div class="processing-ncm-tag">NCM Cap. 20</div>
+                    </div>
+                    <div class="processing-flow-arrow">&darr;</div>
+                    <div class="processing-flow-item">
+                        <div class="processing-flow-text">Açaí (preparação alimentícia com outros ingredientes)</div>
+                        <div class="processing-ncm-tag">NCM Cap. 21</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,13 +186,11 @@
             </div>
         </section>
 
-        <!-- NCM Details Modal -->
         <div id="ncmDetailsModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden p-4">
             <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
                 <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
                 <h3 id="modalTitle" class="text-2xl font-bold text-[#6A4A3C] mb-4">Detalhes da NCM</h3>
                 <div id="modalContent" class="text-gray-700 text-base">
-                    <!-- Content will be loaded here -->
                 </div>
                 <div id="loadingSpinner" class="hidden flex justify-center items-center py-8">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00A0B0]"></div>
@@ -389,43 +409,6 @@
                     }]
                 },
                 options: { ...tooltipCallback, maintainAspectRatio: false }
-            });
-
-            const processingImpactCtx = document.getElementById('processingImpactChart').getContext('2d');
-            new Chart(processingImpactCtx, {
-                type: 'bar',
-                data: {
-                    labels: [
-                        wrapLabel('Fruto Congelado'), 
-                        wrapLabel('Purê Cozido'), 
-                        wrapLabel('Preparação Alimentícia')
-                    ],
-                    datasets: [{
-                        label: 'Exemplo de NCM para Açaí',
-                        data: [8, 20, 21],
-                        backgroundColor: [palette.blue, palette.orange, palette.red],
-                        borderColor: [palette.blue, palette.orange, palette.red],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    ...tooltipCallback,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) { return 'Cap. ' + value; },
-                                color: '#4B5563'
-                            },
-                            grid: { color: '#E5E7EB' }
-                        },
-                        x: {
-                            ticks: { color: '#4B5563' },
-                            grid: { display: false }
-                        }
-                    }
-                }
             });
 
             const tableBody = document.querySelector('#productTable tbody');
