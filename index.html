@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico: Classificação NCM de Produtos Florestais Brasileiros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flowchart-step {
+            border: 2px solid #6A4A3C;
+            background-color: #ffffff;
+            color: #6A4A3C;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            flex-grow: 1;
+        }
+        .flowchart-arrow {
+            color: #CC333F;
+            font-size: 2.5rem;
+            line-height: 1;
+            font-weight: bold;
+        }
+        .kpi-card {
+            background-color: #00A0B0;
+            color: white;
+        }
+        .table-header {
+            background-color: #6A4A3C;
+            color: white;
+        }
+        .search-input {
+            border: 2px solid #EDC951;
+        }
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(237, 201, 81, 0.5);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Chosen Color Palette: Vibrant (Brilliant Blues, Energetic & Playful, Warm Earth Tones) -->
+    <!-- No Mermaid JS or SVG used in this output. -->
+    <!-- Narrative Plan:
+        1. Introduction/Hook: Title and subtitle to set the stage.
+        2. KPIs: Quick overview of the scope (products, chapters, sources).
+        3. Process Flow: Visual explanation of the NCM classification process.
+        4. Data Visualizations (Charts):
+            - Distribution by NCM Chapter (Doughnut Chart): Shows the variety of chapters covered.
+            - Impact of Processing (Bar Chart): Highlights how processing changes NCM, using Açaí as an example.
+        5. Product Explorer (Table with Search): Interactive table for detailed lookup of products and their suggested NCMs, with a new LLM-powered detail feature.
+        6. Conclusion/Footer: Disclaimer and source information.
+    -->
+    <!-- Visualization Choices:
+        - KPIs: Single Big Number (HTML/Tailwind) - To inform key metrics. No SVG.
+        - Process Flow: Flow Chart (Structured HTML/CSS with Tailwind) - To organize and show process. No SVG.
+        - Distribution by NCM Chapter: Donut Chart (Chart.js/Canvas) - To compare composition. No SVG.
+        - Impact of Processing: Bar Chart (Chart.js/Canvas) - To compare categories and show impact. No SVG.
+        - Product Explorer: List/Table (HTML Table with JS filter) - To organize and allow lookup. No SVG.
+        - NCM Details: Text explanation (LLM via Gemini API) displayed in a modal. No SVG.
+    -->
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#6A4A3C] mb-2">Desvendando a Classificação Fiscal</h1>
+            <p class="text-xl text-[#00A0B0] font-semibold">Um Guia Visual para Exportação de Produtos Florestais Brasileiros</p>
+        </header>
+
+        <section id="kpis" class="mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="kpi-card rounded-lg shadow-lg p-6 text-center">
+                    <div class="text-5xl font-bold">53</div>
+                    <div class="text-lg font-semibold mt-2">Produtos Analisados</div>
+                </div>
+                <div class="kpi-card rounded-lg shadow-lg p-6 text-center">
+                    <div class="text-5xl font-bold">16</div>
+                    <div class="text-lg font-semibold mt-2">Capítulos NCM Abrangidos</div>
+                </div>
+                <div class="kpi-card rounded-lg shadow-lg p-6 text-center">
+                    <div class="text-5xl font-bold">3</div>
+                    <div class="text-lg font-semibold mt-2">Fontes IBGE Utilizadas</div>
+                </div>
+            </div>
+            <p class="text-center mt-6 text-gray-600">Este infográfico sintetiza a análise de classificação para uma vasta gama de produtos da biodiversidade brasileira, com base nas pesquisas PAM, PEVS e PPM do IBGE.</p>
+        </section>
+
+        <section id="process-flow" class="mb-16 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-[#6A4A3C] text-center mb-6">O Caminho da Classificação: Do Produto à NCM</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">A correta classificação fiscal não é uma busca simples por palavras-chave. É um processo analítico que considera a natureza, o processamento e a finalidade do produto, como ilustrado abaixo.</p>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <div class="flowchart-step">1. Descrição do Produto (IBGE)</div>
+                <div class="flowchart-arrow transform md:-rotate-0">&rarr;</div>
+                <div class="flowchart-step">2. Análise da Natureza e Processamento</div>
+                <div class="flowchart-arrow transform md:-rotate-0">&rarr;</div>
+                <div class="flowchart-step">3. Identificação da Parte da Planta</div>
+                <div class="flowchart-arrow transform md:-rotate-0">&rarr;</div>
+                <div class="flowchart-step">4. Consulta NESH & Regras Gerais</div>
+                <div class="flowchart-arrow transform md:-rotate-0">&rarr;</div>
+                <div class="flowchart-step bg-[#EB6841] text-white border-[#EB6841]">5. NCM Final</div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div id="category-distribution" class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-3xl font-bold text-[#6A4A3C] text-center mb-2">Distribuição por Categoria NCM</h2>
+                <p class="text-center text-gray-600 mb-6">Os produtos florestais se espalham por diversos capítulos da NCM, refletindo sua imensa variedade. Frutas, sementes e peixes representam as categorias mais proeminentes na lista analisada.</p>
+                <div class="chart-container mx-auto">
+                    <canvas id="ncmChapterChart"></canvas>
+                </div>
+            </div>
+
+            <div id="processing-impact" class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-3xl font-bold text-[#6A4A3C] text-center mb-2">O Impacto do Processamento</h2>
+                <p class="text-center text-gray-600 mb-6">Um mesmo produto pode ter múltiplas classificações NCM dependendo do seu estado. O açaí é um exemplo clássico: sua NCM muda se for fruto congelado, purê ou uma preparação alimentícia.</p>
+                <div class="chart-container mx-auto">
+                    <canvas id="processingImpactChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <section id="product-explorer" class="mb-12 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-[#6A4A3C] text-center mb-6">Explorador de Produtos e Códigos NCM</h2>
+            <div class="mb-6">
+                <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Pesquisar por produto ou código NCM..." class="w-full p-3 rounded-md search-input">
+            </div>
+            <div class="overflow-x-auto">
+                <table id="productTable" class="min-w-full divide-y divide-gray-200">
+                    <thead class="table-header">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Produto</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">HS6 Sugerido</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">NCM Sugerido</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- NCM Details Modal -->
+        <div id="ncmDetailsModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden p-4">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+                <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+                <h3 id="modalTitle" class="text-2xl font-bold text-[#6A4A3C] mb-4">Detalhes da NCM</h3>
+                <div id="modalContent" class="text-gray-700 text-base">
+                    <!-- Content will be loaded here -->
+                </div>
+                <div id="loadingSpinner" class="hidden flex justify-center items-center py-8">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00A0B0]"></div>
+                    <p class="ml-4 text-[#00A0B0]">Gerando explicação...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center text-gray-500 pt-8 border-t border-gray-300">
+            <p>Infográfico gerado com base no "Guia Abrangente de Classificação HS6 e NCM para Produtos Florestais Brasileiros".</p>
+            <p>As classificações são sugestões e devem ser validadas com um especialista. Última atualização: Agosto de 2025.</p>
+        </footer>
+    </div>
+
+    <script>
+        const productData = [
+            { product: "Açaí (fruto fresco/polpa congelada pura)", hs6: "0811.90", ncm: "0811.90.00" },
+            { product: "Castanha-do-pará (amêndoa sem casca)", hs6: "0801.22", ncm: "0801.22.00" },
+            { product: "Mangaba (fruto)", hs6: "0810.90", ncm: "0810.90.00" },
+            { product: "Palmito (preparado ou em conserva)", hs6: "2008.91", ncm: "2008.91.00" },
+            { product: "Umbu (fruto)", hs6: "0810.90", ncm: "0810.90.00" },
+            { product: "Angico (casca)", hs6: "1404.10", ncm: "1404.10.00" },
+            { product: "Barbatimão (casca)", hs6: "1211.90", ncm: "1211.90.90" },
+            { product: "Ipecacuanha ou poaia (raiz)", hs6: "1211.90", ncm: "1211.90.90" },
+            { product: "Jaborandi (folha)", hs6: "1211.90", ncm: "1211.90.90" },
+            { product: "Urucum (semente)", hs6: "1211.90", ncm: "1211.90.90" },
+            { product: "Caucho", hs6: "4001.10", ncm: "4001.10.00" },
+            { product: "Hevea (látex coagulado)", hs6: "4001.29", ncm: "4001.29.90" },
+            { product: "Hevea (látex líquido)", hs6: "4001.10", ncm: "4001.10.00" },
+            { product: "Buriti", hs6: "0801.11", ncm: "0801.11.90" },
+            { product: "Babaçu (amêndoa)", hs6: "1207.99", ncm: "1207.99.90" },
+            { product: "Copaíba (óleo)", hs6: "3301.29", ncm: "3301.29.90" },
+            { product: "Cumaru (amêndoa)", hs6: "0802.12", ncm: "0802.12.00" },
+            { product: "Licuri (coquilho)", hs6: "0801.11", ncm: "0801.11.90" },
+            { product: "Oiticica (semente)", hs6: "1207.99", ncm: "1207.99.90" },
+            { product: "Tucum (amêndoa)", hs6: "1207.99", ncm: "1207.99.90" },
+            { product: "Abacate", hs6: "0804.40", ncm: "0804.40.00" },
+            { product: "Abacaxi", hs6: "0804.30", ncm: "0804.30.00" },
+            { product: "Açaí (cultivado)", hs6: "0811.90", ncm: "0811.90.00" },
+            { product: "Banana (cacho)", hs6: "0803.90", ncm: "0803.90.00" },
+            { product: "Borracha (látex coagulado)", hs6: "4001.29", ncm: "4001.29.90" },
+            { product: "Borracha (látex líquido)", hs6: "4001.10", ncm: "4001.10.00" },
+            { product: "Cacau (em amêndoa)", hs6: "1801.00", ncm: "1801.00.00" },
+            { product: "Café (em grão) Canephora", hs6: "0901.11", ncm: "0901.11.10" },
+            { product: "Curimatã, curimbatá (Quilogramas)", hs6: "0302.89", ncm: "0302.89.31" },
+            { product: "Dendê (cacho de coco)", hs6: "1511.10", ncm: "1511.10.00" },
+            { product: "Dourado (Quilogramas)", hs6: "0302.89", ncm: "0302.89.42" },
+            { product: "Goiaba", hs6: "0804.50", ncm: "0804.50.00" },
+            { product: "Guaraná (semente)", hs6: "1204.00", ncm: "1204.00.90" },
+            { product: "Jatuarana, piabanha e piracanjuba", hs6: "0301.11", ncm: "0301.11.90" },
+            { product: "Juta (fibra)", hs6: "5303.10", ncm: "5303.10.90" },
+            { product: "Malva (fibra)", hs6: "5303.10", ncm: "5303.10.90" },
+            { product: "Mamão", hs6: "0807.20", ncm: "0807.20.00" },
+            { product: "Manga", hs6: "0804.50", ncm: "0804.50.00" },
+            { product: "Maracujá", hs6: "0810.90", ncm: "0810.90.15" },
+            { product: "Matrinxã (Quilogramas)", hs6: "0302.89", ncm: "0302.89.90" },
+            { product: "Melancia", hs6: "0807.11", ncm: "0807.11.00" },
+            { product: "Melão", hs6: "0807.19", ncm: "0807.19.00" },
+            { product: "Ostras, vieiras e mexilhões", hs6: "0307.11", ncm: "0307.11.00" },
+            { product: "Palmito (cultivado)", hs6: "2008.91", ncm: "2008.91.00" },
+            { product: "Piau, piapara, piauçu, piava", hs6: "0303.89", ncm: "0303.89.55" },
+            { product: "Pimenta-do-reino", hs6: "0904.11", ncm: "0904.11.00" },
+            { product: "Pirapitinga (Quilogramas)", hs6: "0302.89", ncm: "0302.89.90" },
+            { product: "Pirarucu (Quilogramas)", hs6: "0302.89", ncm: "0302.89.90" },
+            { product: "Sementes de moluscos (Milheiros)", hs6: "0307.91", ncm: "0307.91.00" },
+            { product: "Tambaqui (Quilogramas)", hs6: "0302.89", ncm: "0302.89.90" },
+            { product: "Traíra e trairão (Quilogramas)", hs6: "0302.89", ncm: "0302.89.90" },
+            { product: "Tucunaré (Quilogramas)", hs6: "0302.89", ncm: "0302.89.90" },
+            { product: "Urucum (semente, cultivado)", hs6: "1211.90", ncm: "1211.90.90" }
+        ];
+
+        const palette = {
+            blue: '#00A0B0',
+            brown: '#6A4A3C',
+            red: '#CC333F',
+            orange: '#EB6841',
+            yellow: '#EDC951'
+        };
+
+        const tooltipCallback = {
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { color: '#374151' }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+
+        function wrapLabel(label, maxWidth = 16) {
+            if (label.length <= maxWidth) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + word).length > maxWidth) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function openModal() {
+            document.getElementById('ncmDetailsModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('ncmDetailsModal').classList.add('hidden');
+            document.getElementById('modalTitle').innerText = 'Detalhes da NCM';
+            document.getElementById('modalContent').innerHTML = '';
+            document.getElementById('loadingSpinner').classList.add('hidden');
+        }
+
+        async function fetchNCMExplanation(ncmCode, productName, retries = 3, delay = 1000) {
+            const prompt = `Atue como um especialista em comércio exterior. Dada a NCM ${ncmCode} e o produto ${productName}, forneça uma explicação detalhada dessa classificação, incluindo o que ela abrange, exemplos de produtos que se enquadram nela (se relevante e diferente do produto fornecido), e quaisquer considerações importantes para exportação ou importação relacionadas a essa NCM. Mantenha a resposta concisa e focada na relevância para o comércio exterior.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429 && i < retries - 1) {
+                            await new Promise(res => setTimeout(res, delay));
+                            delay *= 2;
+                            continue;
+                        }
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        return result.candidates[0].content.parts[0].text;
+                    } else {
+                        throw new Error("Resposta inesperada da API Gemini.");
+                    }
+                } catch (error) {
+                    console.error("Erro ao chamar a API Gemini:", error);
+                    if (i === retries - 1) throw error;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+            throw new Error("Falha ao obter resposta da API Gemini após várias tentativas.");
+        }
+
+        async function showNCMDetails(ncmCode, productName) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            modalTitle.innerText = `Detalhes da NCM ${ncmCode} para ${productName}`;
+            modalContent.innerHTML = '';
+            loadingSpinner.classList.remove('hidden');
+            openModal();
+
+            try {
+                const explanation = await fetchNCMExplanation(ncmCode, productName);
+                modalContent.innerHTML = `<p>${explanation.replace(/\n/g, '<br>')}</p>`;
+            } catch (error) {
+                modalContent.innerHTML = `<p class="text-red-500">Erro ao carregar detalhes da NCM: ${error.message}. Por favor, tente novamente.</p>`;
+            } finally {
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chapterCounts = productData.reduce((acc, { ncm }) => {
+                const chapter = `Cap. ${ncm.substring(0, 2)}`;
+                acc[chapter] = (acc[chapter] || 0) + 1;
+                return acc;
+            }, {});
+
+            const sortedChapters = Object.entries(chapterCounts).sort(([, a], [, b]) => b - a);
+            const chapterLabels = sortedChapters.map(([label]) => label);
+            const chapterData = sortedChapters.map(([, count]) => count);
+
+            const ncmChapterCtx = document.getElementById('ncmChapterChart').getContext('2d');
+            new Chart(ncmChapterCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: chapterLabels,
+                    datasets: [{
+                        label: 'Nº de Produtos',
+                        data: chapterData,
+                        backgroundColor: [palette.blue, palette.orange, palette.yellow, palette.red, palette.brown, '#34D399', '#A78BFA'],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: { ...tooltipCallback, maintainAspectRatio: false }
+            });
+
+            const processingImpactCtx = document.getElementById('processingImpactChart').getContext('2d');
+            new Chart(processingImpactCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        wrapLabel('Fruto Congelado'), 
+                        wrapLabel('Purê Cozido'), 
+                        wrapLabel('Preparação Alimentícia')
+                    ],
+                    datasets: [{
+                        label: 'Exemplo de NCM para Açaí',
+                        data: [8, 20, 21],
+                        backgroundColor: [palette.blue, palette.orange, palette.red],
+                        borderColor: [palette.blue, palette.orange, palette.red],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    ...tooltipCallback,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) { return 'Cap. ' + value; },
+                                color: '#4B5563'
+                            },
+                            grid: { color: '#E5E7EB' }
+                        },
+                        x: {
+                            ticks: { color: '#4B5563' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            const tableBody = document.querySelector('#productTable tbody');
+            productData.forEach(item => {
+                const row = `<tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.product}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.hs6}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-semibold">${item.ncm}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="showNCMDetails('${item.ncm}', '${item.product}')" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-[#00A0B0] hover:bg-[#007B8A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00A0B0]">
+                            ✨ Detalhes NCM
+                        </button>
+                    </td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        });
+
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById('productTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                let visible = false;
+                const tds = tr[i].getElementsByTagName('td');
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j]) {
+                        if (tds[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            visible = true;
+                            break;
+                        }
+                    }
+                }
+                tr[i].style.display = visible ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>
